@@ -1,0 +1,24 @@
+{
+  "name": "parco-proto-server",
+  "version": "1.0.0",
+  "description": "prototype server for parco molo app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/felixmc/parco-proto-server.git"
+  },
+  "author": "Felix Milea-Ciobanu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felixmc/parco-proto-server/issues"
+  },
+  "homepage": "https://github.com/felixmc/parco-proto-server#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "mongodb": "^2.1.2"
+  }
+}
