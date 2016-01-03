@@ -7,7 +7,8 @@ var parser  = require('body-parser');
 
 var app = express();
 
-// parse application/json
+app.set('json spaces', 4);
+
 app.use(parser.json());
 
 app.use(function(req, res, next) {
