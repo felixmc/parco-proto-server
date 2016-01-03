@@ -25,9 +25,9 @@ app.post('/location', function(req, res) {
 		collection.insert(req.body, function(err, result) {
 			if (err) {
 				console.dir(err);
-				res.status(500).send('db error!');
+				res.status(500).json({ message: 'DB error' });
 			} else {
-				res.status(201).send('success');
+				res.status(201).json({ message: 'Success' });
 			}
 		});
 
