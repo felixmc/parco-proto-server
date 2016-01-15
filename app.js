@@ -4,6 +4,7 @@ var MongoClient = require('mongodb').MongoClient;
 
 var express = require('express');
 var parser	= require('body-parser');
+var Promise = require('promise');
 
 var app = express();
 
