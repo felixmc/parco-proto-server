@@ -18,16 +18,21 @@ app.use(function(req, res, next) {
 	next();
 });
 
+var db = null;
+
 function mongoConnect() {
 	return new Promise(function(resolve, reject) {
-		MongoClient.connect('mongodb://localhost:27017/parco-proto', function(err, db) {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(db);
-			}
-		});
-
+		if (db) {
+			resolve(db);
+		} else {
+			MongoClient.connect('mongodb://localhost:27017/parco-proto', function(err, db) {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(db);
+				}
+			});
+		}
 	});
 }
 
@@ -37,8 +42,6 @@ app.get('/list', function(req, res) {
 			var collection = db.collection('location');
 
 			var hexSeconds = (Math.floor(Date.now()/1000) - 60).toString(16);
-
-			// Create an ObjectId with that hex timestamp
 			var timebound = ObjectId(hexSeconds + "0000000000000000");
 
 			collection.aggregate([
@@ -63,19 +66,20 @@ app.get('/user/:uuid', function(req, res) {
 		.then(function(db) {
 			var collection = db.collection('location');
 
-			collection.find({ uuid: req.params.uuid })
-				.sort({ _id: -1 })
-				.limit(1)
-				.exec(function(err, result) {
-					if (err) {
-						console.dir(err);
-						res.status(500).json({ message: 'db error', date: new Date() });
-					} else if (!result.length) {
-						res.status(404).json({ message: 'not found', date: new Date() });
-					} else {
-						res.status(200).json({ message: 'success', data: result[1], date: new Date() });
-					}
-				});
+			var query = collection.find({ uuid: req.params.uuid })
+						.sort({ _id: -1 })
+						.limit(1);
+
+			query.toArray(function(err, result) {
+				if (err) {
+					console.dir(err);
+					res.status(500).json({ message: 'db error', date: new Date() });
+				} else if (!result.length) {
+					res.status(404).json({ message: 'not found', date: new Date() });
+				} else {
+					res.status(200).json({ message: 'success', data: result[0], date: new Date() });
+				}
+			});
 		})
 		.catch(console.dir);
 });
