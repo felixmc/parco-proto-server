@@ -80,6 +80,7 @@ app.get('/user/:uuid', function(req, res) {
 						res.status(200).json({ message: 'success', data: result[0], date: new Date() });
 					}
 				});
+		});
 });
 
 app.post('/location', function(req, res) {
