@@ -18,16 +18,21 @@ app.use(function(req, res, next) {
 	next();
 });
 
+var db = null;
+
 function mongoConnect() {
 	return new Promise(function(resolve, reject) {
-		MongoClient.connect('mongodb://localhost:27017/parco-proto', function(err, db) {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(db);
-			}
-		});
-
+		if (db) {
+			resolve(db);
+		} else {
+			MongoClient.connect('mongodb://localhost:27017/parco-proto', function(err, db) {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(db);
+				}
+			});
+		}
 	});
 }
 
@@ -37,8 +42,6 @@ app.get('/list', function(req, res) {
 			var collection = db.collection('location');
 
 			var hexSeconds = (Math.floor(Date.now()/1000) - 60).toString(16);
-
-			// Create an ObjectId with that hex timestamp
 			var timebound = ObjectId(hexSeconds + "0000000000000000");
 
 			collection.aggregate([
@@ -77,10 +80,7 @@ app.get('/user/:uuid', function(req, res) {
 						res.status(200).json({ message: 'success', data: result[0], date: new Date() });
 					}
 				});
-		})
-		.catch(console.dir);
 });
-
 
 app.post('/location', function(req, res) {
 	mongoConnect()
