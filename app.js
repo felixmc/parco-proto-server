@@ -63,17 +63,18 @@ app.get('/user/:uuid', function(req, res) {
 		.then(function(db) {
 			var collection = db.collection('location');
 
-			collection.find({ uuid: req.params.uuid })
+			var query = collection.find({ uuid: req.params.uuid })
 				.sort({ _id: -1 })
-				.limit(1)
-				.exec(function(err, result) {
+				.limit(1);
+
+				query.toArray(function(err, result) {
 					if (err) {
 						console.dir(err);
 						res.status(500).json({ message: 'db error', date: new Date() });
 					} else if (!result.length) {
 						res.status(404).json({ message: 'not found', date: new Date() });
 					} else {
-						res.status(200).json({ message: 'success', data: result[1], date: new Date() });
+						res.status(200).json({ message: 'success', data: result[0], date: new Date() });
 					}
 				});
 		})
