@@ -41,7 +41,7 @@ app.get('/list', function(req, res) {
 			// Create an ObjectId with that hex timestamp
 			var timebound = ObjectId(hexSeconds + "0000000000000000");
 
-			collection.aggregate([{ $group: { _id: '$uuid' }, $match: { _id: { $gt: timeBound } } }], function(err, results) {
+			collection.aggregate([{ $group: { _id: '$uuid' }, $match: { _id: { $gt: timebound } } }], function(err, results) {
 				if (err) {
 					console.dir(err);
 					res.status(500).json({ message: 'db error', date: new Date() });
