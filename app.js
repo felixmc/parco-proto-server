@@ -18,17 +18,18 @@ app.use(function(req, res, next) {
 	next();
 });
 
-var db = null;
+var dbRef = null;
 
 function mongoConnect() {
 	return new Promise(function(resolve, reject) {
-		if (db) {
-			resolve(db);
+		if (dbRef) {
+			resolve(dbRef);
 		} else {
 			MongoClient.connect('mongodb://localhost:27017/parco-proto', function(err, db) {
 				if (err) {
 					reject(err);
 				} else {
+					dbRef = db;
 					resolve(db);
 				}
 			});
